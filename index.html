@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGIS dengan GeoServer dan Leaflet</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- L.Geoserver Library -->
+    <script src="lib/L.Geoserver.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 500px;
+        }
+
+        h1 {
+            text-align: center; /* Posisi di tengah */
+            font-size: 16px; /* Ukuran font lebih kecil */
+            margin: 10px 0; /* Ruang atas dan bawah */
+        }
+
+        .legend {
+            background: white;
+            padding: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebGIS dengan Leaflet dan GeoServer Kabupaten Penajam Paser Utara</h1>
+    <div id="map"></div>
+    <script>
+        // Inisialisasi peta
+        var map = L.map('map').setView([-1.2412845699209853, 116.71625204874707], 9); // Ganti dengan koordinat awal
+
+        // Tambahkan peta dasar
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        // Tambahkan layer WMS dari GeoServer
+        var wmsLayer1 = L.Geoserver.wms('http://localhost:8080/geoserver/pgweb10/ows?', {
+            layers: 'jml_penduduk_2010', // Ganti dengan nama layer Anda
+            format: 'image/png',
+            transparent: true,
+        }).addTo(map);
+
+        var wmsLayer2 = L.Geoserver.wms('http://localhost:8080/geoserver/pgweb10/ows?', {
+            layers: 'Jalan_oke', // Ganti dengan nama layer Anda
+            format: 'image/png',
+            transparent: true,
+        }).addTo(map);
+
+        // Tambahkan legenda untuk jml_penduduk_2010
+        var legendUrl1 = 'http://localhost:8080/geoserver/pgweb10/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&LAYER=jml_penduduk_2010';
+
+        // Tambahkan legenda untuk Jalan_oke
+        var legendUrl2 = 'http://localhost:8080/geoserver/pgweb10/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&LAYER=Jalan_oke';
+
+        // Kontrol legenda
+        var legendControl = L.control({ position: 'topright' });
+        legendControl.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend');
+            div.innerHTML = `
+                <h4>Legenda</h4>
+                <div>
+                    <strong>Jumlah Penduduk:</strong><br>
+                    <img src="${legendUrl1}" alt="Legend Jumlah Penduduk"><br>
+                    <strong>Jalan:</strong><br>
+                    <img src="${legendUrl2}" alt="Legend Jalan">
+                </div>
+            `;
+            return div;
+        };
+        legendControl.addTo(map);
+
+        var infoControl = L.control({ position: 'bottomleft' });
+        infoControl.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info');
+            div.innerHTML = `
+                <strong>Info Pembuat</strong><br>
+                Nama: Dias Cirra Aura<br>
+                NIM: 23/523070/SV/23843<br>
+                Tahun: 2024
+            `;
+            return div;
+        };
+        infoControl.addTo(map);
+
+    </script>
+</body>
+</html>
