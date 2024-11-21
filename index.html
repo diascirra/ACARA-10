@@ -10,10 +10,13 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- L.Geoserver Library -->
     <script src="lib/L.Geoserver.js"></script>
+    <!-- Bootstrap CSS (for navbar) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         #map {
             width: 100%;
             height: 500px;
+            margin-top: 60px; /* Adjust for navbar height */
         }
 
         h1 {
@@ -28,11 +31,40 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             font-size: 12px;
         }
+
+        /* Navbar styling */
+        .navbar {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">WebGIS Kabupaten Penajam Paser Utara</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <h1>WebGIS dengan Leaflet dan GeoServer Kabupaten Penajam Paser Utara</h1>
     <div id="map"></div>
+
     <script>
         // Inisialisasi peta
         var map = L.map('map').setView([-1.2412845699209853, 116.71625204874707], 9); // Ganti dengan koordinat awal
@@ -91,7 +123,9 @@
             return div;
         };
         infoControl.addTo(map);
-
     </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
